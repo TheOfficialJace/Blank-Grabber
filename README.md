@@ -14,10 +14,6 @@
     7) Captures Webcam Image.
     8) Sends Data Through Discord Webhooks.
 
-## Checking output file in VirusTotal (Results might not be the same for you)
-
-[![result](https://user-images.githubusercontent.com/94945186/170498954-524be4c6-91ee-4f42-97ae-e762c8618f2a.png)](https://www.virustotal.com/gui/file/e4869c80bd0eb3aa9cf1fdc9f295bf25992ae47adacdcdf4a365d9a3a63fa976)
-
 ## Frequently Asked Questions
 
 **1) What should be the approximate file size after compiling?**
@@ -27,4 +23,4 @@
 > *You can replace the "icon.ico" file in the "Data" folder with your icon but name and format (.ico) must be the same.*
 
 **3) Can my webhook get leaked?**
-> *There is a very less chance that your webhook is going to be found.*
+> *There is a very low chance that your webhook is going to be found.*

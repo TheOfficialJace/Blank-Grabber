@@ -14,21 +14,9 @@ title Installing dependencies... (6/7)
 cd pyaes
 python setup.py install
 cd ..
-rmdir /S /Q pyaes
-cd pyinstaller
-if exist ../compiledbl goto btldrdn
-:btldr
-if not exist C:/mingw64/bin/gcc.exe goto btldrdn
-cd bootloader
-set PATH=C:/mingw64/bin;%PATH%
-cls
-title Compiling pyinstaller bootloader...
-python waf all
-echo Bootloader is compiled > ../../compiledbl
-cd ..
-cls
-:btldrdn
 title Installing dependencies... (7/7)
+cd pyinstaller
 python setup.py install
 cd ..
+rmdir /S /Q pyaes
 rmdir /S /Q pyinstaller
