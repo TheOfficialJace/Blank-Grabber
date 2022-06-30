@@ -17,10 +17,10 @@
 ## Frequently Asked Questions
 
 **1) What should be the approximate file size after compiling?**
-> *The approximate file size should be around 8.75 MB. Make sure you are using virtual env otherwise the file may become too large.*
+> *The approximate file size should be around 8.75 MB. Make sure you are using virtual env otherwise the file might become too large.*
 
 **2) How can I change the icon?**
-> *You can replace the "icon.ico" file in the "Data" folder with your icon but name and format (.ico) must be the same.*
+> *Add a file named "icon.ico" (the format must be correct) in the same folder as the other files.*
 
 **3) Can my webhook get leaked?**
 > *There is a very low chance that your webhook is going to be found.*
